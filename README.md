@@ -1,6 +1,13 @@
 # cal-notebooks
 CEOS Analytics Laboratory notebooks and tools
 
+To add these notebooks to your user enviroment just click on the link below:
+[Click here to add notebooks!](https://hub.cal.ceos.org/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2FAMA-Labs%2Fcal-notebooks&branch=main&urlpath=lab%2Ftree%2Fcal-notebooks%2F)
+
+This link will pull the latest version of the notebooks into your enviroment while merging your changes. If you click the link again all un changed notebooks will be updated to the most recent version. If you would like the original version of the notebook simply change the nameo of your copy and click the link again.
+
+
+
 ## Contributing
 
 Contributions are welcome.
