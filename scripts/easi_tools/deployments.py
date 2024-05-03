@@ -12,6 +12,7 @@ deployment_map = {
     'csiro': {
         'domain': 'csiro.easi-eo.solutions',
         'db_database': '',
+        'training_shapefile': '',
         'scratch_bucket': '',
         'productmap': {'landsat': 'ga_ls8c_ard_3', 'sentinel-2': 'ga_s2am_ard_3', 'dem': 'copernicus_dem_30'},
         'location': 'Lake Hume, Australia',
@@ -22,6 +23,7 @@ deployment_map = {
     'asia': {
         'domain': 'asia.easi-eo.solutions',
         'db_database': '',
+        'training_shapefile': '',
         'scratch_bucket': '',
         'productmap': {'landsat': 'landsat8_c2l2_sr', 'sentinel-2': 's2_l2a', 'sar': 'asf_s1_grd_gamma0', 'dem': 'copernicus_dem_30'},
         'location': 'Lake Tempe, Indonesia',
@@ -36,16 +38,24 @@ deployment_map = {
     'chile': {
         'domain': 'datacubechile.cl',
         'db_database': 'easido_prod_db',
+        'training_shapefile': '',
         'scratch_bucket': 'easido-prod-user-scratch',
         'productmap': {'landsat': 'landsat8_c2l2_sr', 'sentinel-2': 's2_l2a', 'sar': 'asf_s1_grd_gamma0', 'dem': 'copernicus_dem_30'},
-        'location': '',
-        'latitude': (0, 0),
-        'longitude': (0, 0),
-        'time': ('', ''),
+        'location': 'La Serena, Chile',
+        'latitude': (-29.95, -29.85),
+        'longitude': (-71.3, -71.2),
+        'latitude_big': (-29.95, -27.95),
+        'longitude_big': (-71.3, -69.3),
+        'time': ('2022-02-01', '2022-05-01'),
+        'target': {
+            'landsat': {'crs': 'epsg:32718', 'resolution': (-30,30)},
+            'sentinel-2': {'crs': 'epsg:32718', 'resolution': (-10,10)}
+        }
     },
     'adias': {
         'domain': 'adias.aquawatchaus.space',
         'db_database': '',
+        'training-shapefile': '',
         'scratch_bucket': '',
         'productmap': {'landsat': 'landsat8_c2l2_sr', 'sentinel-2': 's2_l2a', 'sar': 'asf_s1_grd_gamma0', 'dem': 'copernicus_dem_30'},
         'location': '',
@@ -53,9 +63,10 @@ deployment_map = {
         'longitude': (0, 0),
         'time': ('', ''),
     },
-    'eail': {
-        'domain': 'eail.easi-eo.solutions',
+    'cal': {
+        'domain': 'cal.ceos.org',
         'db_database': 'ceoseail_eail_db',
+        'training_shapefile': './ancillary_data/VA_Counties_Newport_News.shp',
         'scratch_bucket': 'ceoseail-eail-user-scratch',
         'ows': False,
         'map': False,
@@ -63,14 +74,18 @@ deployment_map = {
         'location': 'Newport News, Virginia',
         'latitude': (37.02, 37.12),
         'longitude': (-76.55, -76.45),
+        'latitude_big': (37, 39),
+        'longitude_big': (-77, -75),
         'time': ('2022-01-01', '2022-04-01'),
         'target': {
             'landsat': {'crs': 'epsg:32618', 'resolution': (-30,30)},
+            'sentinel-2': {'crs': 'epsg:32618', 'resolution': (-10,10)}
         }
     },
     'sub-apse2': {
         'domain': 'sub-apse2.easi-eo.solutions',
         'db_database': '',
+        'training_shapefile': '',
         'scratch_bucket': '',
         'ows': False,
         'map': False,
@@ -84,7 +99,7 @@ deployment_map = {
 
 
 class EasiDefaults():
-    """Provide deployment-specific variables for EASI notebooks"""
+    """Provide deployment-specific default variables for EASI notebooks"""
     
     def __init__(self, deployment=None):
         """Initialise"""
@@ -130,6 +145,11 @@ class EasiDefaults():
     def db_database(self):
         """Database name"""
         return self.deployment['db_database']
+
+    @property
+    def training_shapefile(self):
+        """Database name"""
+        return self.deployment['training_shapefile']
     
     @property
     def scratch_bucket(self):
@@ -169,13 +189,23 @@ class EasiDefaults():
 
     @property
     def latitude(self):
-        """Default latitude name"""
+        """Default latitude range"""
         return self.deployment['latitude']
 
     @property
     def longitude(self):
-        """Default longitude name"""
+        """Default longitude range"""
         return self.deployment['longitude']
+
+    @property
+    def latitude_big(self):
+        """Default big latitude range"""
+        return self.deployment['latitude_big']
+    
+    @property
+    def longitude_big(self):
+        """Default big longitude range"""
+        return self.deployment['longitude_big']
 
     @property
     def time(self):

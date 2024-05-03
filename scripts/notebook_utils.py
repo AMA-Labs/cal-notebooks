@@ -27,7 +27,6 @@ from IPython.display import HTML
 
 # Python
 import sys, os, re
-import inspect
 import logging
 from pathlib import Path
 from collections import Counter
@@ -131,17 +130,6 @@ def initialize_dask(use_gateway=False, workers=(1,2), wait=False, local_port=878
 
     # Local cluster
     else:
-        # First, check whether the workers parameter has actually been passed by the user, if not, let Client() use its defaults.
-        # Note that this uses 'is' not '=='. As strings are immutable, this works even if the user passes the default (1,2).
-
-        # Retrieve the default for workers
-        workers_default = initialize_dask.__defaults__[inspect.getfullargspec(initialize_dask).args.index('workers')]
-        
-        if workers is workers_default:
-            n_workers = None
-        else:
-            n_workers = workers[0]
-            
         try:
             # This creates a new Client connection to an existing Dask scheduler if one exists.
             # There is no practical way to get the LocalCluster object from the existing scheduler,
@@ -149,13 +137,10 @@ def initialize_dask(use_gateway=False, workers=(1,2), wait=False, local_port=878
             # The LocalCluster object is only available from the notebook that created it.
             # Restart the kernel or `client.close();cluster.close()` in each notebook that
             # created one to remove existing LocalClusters.
-            client = Client(f'localhost:{local_port}', timeout='2s', n_workers=n_workers)
+            client = Client(f'localhost:{local_port}', timeout='2s')
             cluster = client.cluster  # None
         except:
-            cluster = LocalCluster(
-                n_workers=n_workers,
-                # scheduler_port=local_port # This was causing errors so has been commented out
-            )
+            cluster = LocalCluster(scheduler_port=local_port)
             client = Client(cluster)
         
     return cluster, client
